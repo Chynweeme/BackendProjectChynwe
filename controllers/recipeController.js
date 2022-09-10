@@ -22,7 +22,7 @@ export const newRecipe = async(req,res)=>{
 export const getAllRecipe = async(req,res)=>{
 
     try{
-        const rec = await new recipe.find()
+        const rec = await recipe.find()
 
         if (rec){
             res.send(rec)
@@ -38,3 +38,63 @@ export const getAllRecipe = async(req,res)=>{
 
 // get recipe by ID
 
+export const getRecipe = async(req,res)=>{
+    try{
+        if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.json({message: "Recipe not found"});
+        }
+        const id = req.params.id;
+        const rec = await recipe.findById(id);
+        if(rec){
+            res.send(rec);
+        }
+
+    }catch(error){
+        console.error(error.message);
+    }
+}
+
+
+//update Organization
+export const updateRecipe = async(req,res)=>{
+    try{
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.json({ 
+             message:"Recipe not found"
+         });
+         }
+         const id = req.params.id;
+         const rec = await recipe.findByIdAndUpdate(id,req.body,{
+            new: true,
+            runValidators: true
+         })
+         if(rec){
+            res.json({
+                message: "Recipe updated successfully",
+                data: rec
+            })
+         }
+    }catch(error){
+        console.error(error.message);
+    }
+}
+
+
+//delete Recipe
+
+export const deleteRecipe = async(req,res)=>{
+    try{
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.json({ 
+             message:"Recipe not found"
+         });
+         }
+         const id = req.params.id;
+         const rec = await recipe.findByIdAndDelete(id)
+         if(rec){
+            res.json({message: "Recipe deleted successfully!"})
+         }
+    }catch(error){
+        console.error(error.message)
+    }
+}

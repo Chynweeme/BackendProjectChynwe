@@ -7,6 +7,13 @@ const userSchema = new mongoose.Schema(
             required: true,
             unique: true
         },
+        // rating:{
+        //     type: Number,
+        //     required: true
+        // },
+        // comment:{
+        //     type: String
+        // },
         email:[
             {
             type: String,
