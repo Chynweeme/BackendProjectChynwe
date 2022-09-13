@@ -1,11 +1,12 @@
 import mongoose from "mongoose"
+import bcrypt from "bcrypt"
 
 const userSchema = new mongoose.Schema(
     {
         userName:{
             type: String,
             required: true,
-            unique: true
+            unique: true,
         },
         // rating:{
         //     type: Number,
@@ -17,7 +18,8 @@ const userSchema = new mongoose.Schema(
         email:[
             {
             type: String,
-            required: true
+            required: true,
+            unique: true
             }
         ],
         password:{
@@ -27,7 +29,8 @@ const userSchema = new mongoose.Schema(
         role:{
             type: String,
             enum: ['Regular','Professional'],
-            required: true
+            required:false
+            
         },
         isAdmin:{
             type: Boolean,
@@ -38,5 +41,15 @@ const userSchema = new mongoose.Schema(
         timestamps: true
     }
 )
+
+// hash password
+userSchema.pre('save', async function(next){
+    const userz = this
+    if(userz.isModified('password')){
+        const salt = await bcrypt.genSalt();
+        userz.password = await bcrypt.hash(userz.password,salt);
+        next();
+    }
+})
 
 export const user = mongoose.model('user',userSchema)
