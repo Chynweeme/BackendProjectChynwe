@@ -9,7 +9,7 @@ const recipeSchema = new mongoose.Schema(
         author:
         {
             type: String,
-            required: true
+            required: false
         },
         ingredients:[
             {
@@ -27,7 +27,7 @@ const recipeSchema = new mongoose.Schema(
         },
         photo:{
             type: String,
-            required: true
+            // required: true
         },
         comment:[{type:String}],
         rating:
