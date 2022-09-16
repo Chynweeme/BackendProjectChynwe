@@ -1,16 +1,37 @@
 import express from 'express'
 import mongoose from 'mongoose';
 
+
 import {recipe} from '../models/recipeModels.js'
+import { generateToken } from '../utils/util.js';
 
 export const newRecipe = async(req,res)=>{
     try {
-        const rec = new recipe(req.body); 
+        const {recipeName,ingredients,duration,description,tag}= req.body;
+         const createRecipe = await recipe.create({
+            recipeName,
+            ingredients,
+            duration,
+            description,
+            tag
+         });
+         if(createRecipe){
+            res.json({
+                _id: createRecipe._id,
+                recipeName: createRecipe.recipeName,
+                ingredients: createRecipe.ingredients,
+                duration: createRecipe.duration,
+                description: createRecipe.description,
+                tag: createRecipe.tag,
+                author: req.user.userName,
+                token: generateToken(createRecipe._id)
+            })
+         }
 
-        await rec.save();
+        await createRecipe.save();
         res.json({
             message: "New recipe created successfully!",
-            data: rec
+            data: createRecipe
         } )
     } catch (error) {
         console.error(error.message);

@@ -30,6 +30,7 @@ export const signUp =async(req,res)=>{
 }   
 
 export const loginUser = async(req,res)=> {
+    try{
     const {email,password}= req.body;
     
     const User = await user.findOne({email});
@@ -41,10 +42,13 @@ export const loginUser = async(req,res)=> {
     if (user) {
         res.json({
             _id: User._id,
-            name: User.name,
+            name: User.userName,
             email:User.email,
             token: generateToken(User._id),
         });
+    }} catch(err){
+        console.log(err);
+        res.status(500).send('incorrect  password or email')
     }
 }  
 
@@ -127,3 +131,22 @@ export const deleteUser = async(req,res)=>{
         console.error(error.message);
    }
 }
+
+
+// export const loginUserz = async(req,res)=>{
+//         const {email,password} = req.body;
+//         try {
+//             let usr = await user.login(email, password)
+//             const token = await generateToken(usr._id);
+//             if(!usr){
+//                 throw new Error("Incorrect email or password")
+//             }
+    
+//             if (usr){
+//                 return res.status(200).send({msg:`${usr.username}, you logged in successfully`, token})
+//             }
+//         } catch (error) {
+//             console.log(error);
+//             res.status(500).send('an error occured');
+//         }
+//     }
