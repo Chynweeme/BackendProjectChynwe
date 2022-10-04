@@ -12,7 +12,7 @@ const app = express()
 
 app.use(express.json())
 
-const port = 5800
+const port = process.env.PORT || 5800
 
 app.get('/',(req,res)=>{
     res.send("Nna ehn... I don taya!!")
