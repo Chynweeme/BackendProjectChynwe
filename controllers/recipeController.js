@@ -13,7 +13,9 @@ export const newRecipe = async(req,res)=>{
             ingredients,
             duration,
             description,
-            tag
+            tag,
+            photo,
+            author
          });
          if(createRecipe){
             res.json({
@@ -23,6 +25,7 @@ export const newRecipe = async(req,res)=>{
                 duration: createRecipe.duration,
                 description: createRecipe.description,
                 tag: createRecipe.tag,
+                photo: createRecipe.photo,
                 author: req.user.userName,
                 token: generateToken(createRecipe._id)
             })
